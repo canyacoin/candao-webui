@@ -1,0 +1,98 @@
+<!-- Topbar -->
+<nav class="topbar topbar-expand-md topbar-sticky" id="section-top">
+  <div class="container">
+
+    <div class="topbar-left">
+      <button class="topbar-toggler text-gray">&#9776;</button>
+      <a class="topbar-brand" [routerLink]="['/home']">
+        <!-- <img class="logo-inverse" src="assets/img/logo.svg" width="136px" alt="logo"> -->
+        <img class="logo-default" src="assets/img/logodao.svg" width="auto" height="36px" alt="logo">
+      </a>
+
+      <div class="search-container mx-40 hidden-sm-down">
+        <form class="form-inline justify-content-center justify-content-lg-end" method="post" (ngSubmit)="onSubmit(inputSearch.value);">
+          <div class="input-group">
+            <!-- (keyup)="onKeyUp(inputSearch.value);" -->
+            <input #inputSearch type="text" size="20" class="search-input" placeholder="Search...">
+            <span class="input-group-btn">
+              <button class="btn btn-default btn-search" type="submit" border-none>
+                <img src="assets/img/search-icon.svg" class="search-icon" border-5>
+              </button>
+            </span>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+    <div class="topbar-right">
+      <ul class="topbar-nav nav">
+        <li class="nav-item">
+          <a [routerLink]="['/dashboard']" class="nav-link" data-scrollto="section-home">Return to Dashboard</a>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</nav>
+<!-- END Topbar -->
+
+<!-- Header -->
+<header class="header fadeout pt-10 pb-0 mb-0" id="section-home">
+  <div class="container">
+    <div class="row partner mt-25 sub-header-menu">
+
+    </div>
+  </div>
+</header>
+<!-- END Header -->
+
+<!-- Main container -->
+<main class="main-content">
+
+  <!--
+  |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+  | Main section
+  |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+  !-->
+  <section class="bg-white pt-5 pb-30 min-70" id="section-main">
+    <div class="container">
+
+      <div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center">
+        <img src="assets/img/loader.svg" height="36px" alt="Loader">
+      </div>
+
+      <div *ngIf="!loading && (searchResults && searchResults.length < 1)" class="container">
+        <div class="row">
+          <div class="col-12 d-flex flex-column">
+            <div class="flexbox-container">
+              <br>
+              <h4 class="fw-400">Uh, oh!</h4>
+              <h5 class="fw-300">We couldn't find what you were looking for.</h5>
+              <div id="hand" class="mt-80"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+
+        <div class="col-12">
+
+          <app-grid [providers]="searchResults" (addToWhitelist)="onAddToWhitelist($event);" (activateProfile)="onActivateProfile($event);"
+            (rejectProvider)="onRejectProvider($event);"></app-grid>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+<!-- END Main container -->
+
+<app-footer></app-footer>
+
+<a class="scroll-top" href="#">
+  <i class="fa fa-angle-up"></i>
+</a>

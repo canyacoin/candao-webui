@@ -1,0 +1,498 @@
+<!-- Topbar -->
+<nav class="topbar topbar-expand-md topbar-sticky" id="section-top">
+  <div class="container">
+
+    <div class="topbar-left">
+      <button class="topbar-toggler text-gray">&#9776;</button>
+      <a class="topbar-brand" [routerLink]="['/home']">
+        <!-- <img class="logo-inverse" src="assets/img/logo.svg" width="136px" alt="logo"> -->
+        <img class="logo-default" src="assets/img/logodao.svg" width="auto" height="36px" alt="logo">
+      </a>
+
+      <div *ngIf="state === 'logged'" class="search-container mx-40 hidden-sm-down">
+          <form class="form-inline justify-content-center justify-content-lg-end" method="post" (ngSubmit)="onSubmit(inputSearch.value);">
+              <div class="input-group">
+                <!-- (keyup)="onKeyUp(inputSearch.value);" -->
+                <input #inputSearch
+                  type="text" 
+                  size="20"
+                  class="search-input" 
+                  placeholder="Search...">
+                <span class="input-group-btn">
+                  <button class="btn btn-default btn-search" type="submit" border-none>
+                    <img src="assets/img/search-icon.svg" class="search-icon" border-5>
+                  </button>
+                </span>
+              </div>
+            </form>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <!-- <ul *ngIf="state === 'logged'" class="topbar-nav nav">
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/']" data-scrollto="section-home">Dashboard</a>
+          </li>
+  
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/home']" data-scrollto="section-home">Messages</a>
+          </li>
+  
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/settings']" data-scrollto="section-home">Settings</a>
+          </li>
+        </ul> -->
+
+      <ul *ngIf="state === 'logged'" class="nav nav-outline pb-10 hidden-sm-down">
+        <li class="nav-item">
+          <a class="nav-link active" style="border: none; color: #3cf; background: white;" [ngStyle]="{'border-bottom': currentTab === 'All' ? '1px solid #3cf':'white' }"
+            (click)="onTab('All');" data-toggle="tab" href="#tab-1">All</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="border: none; color: #3cf; background: white;" [ngStyle]="{'border-bottom': currentTab === 'Pioneers' ? '1px solid #3cf':'white' }"
+            (click)="onTab('Pioneers');" data-toggle="tab" href="#tab-2">Whitelist</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="border: none; color: #3cf; background: white;" [ngStyle]="{'border-bottom': currentTab === 'Rejected' ? '1px solid #3cf':'white' }"
+            (click)="onTab('Rejected');" data-toggle="tab" href="#tab-3">Rejected</a>
+        </li>
+      </ul>
+
+      &nbsp;&nbsp;
+      <a *ngIf="state === 'logged'" href="https://etherscan.io/address/0x17b4ae55a5b0b6c10b0f4bae2d75a4e83de41709" class="btn btn-primary btn-outline btn-sm hidden-sm-down"
+        target="_blank">
+        Check contract
+      </a>
+
+      <a *ngIf="state === 'logged' && isAdmin" [routerLink]="['/admin']" class="btn btn-primary btn-outline btn-sm mt-7" style="border: none; background: none; margin-top: 4px; box-shadow: none;">
+        <i class="ti-settings text-primary fw-100 fs-20"></i>
+      </a>
+
+    </div>
+
+  </div>
+</nav>
+<!-- END Topbar -->
+
+<!-- Header -->
+<header class="header fadeout pt-10 pb-0 mb-0" id="section-home">
+  <div class="container">
+    <div class="row partner mt-25 sub-header-menu">
+
+    </div>
+  </div>
+</header>
+<!-- END Header -->
+
+<!-- Main container -->
+<main class="main-content">
+
+  <section *ngIf="state === 'loading'" class="section bg-white py-10" id="section-loading">
+    <div class="container d-flex flex-column justify-content-center text-center">
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <img src="assets/img/loader.svg" height="36px" alt="Loader">
+      <h2 class="fs-50 fw-600 lh-15 hidden-sm-down">CanYa help me with
+        <span class="text-primary" data-type="Content Creators, Designers, Software Developers, Creatives, Financial Experts, Marketing, SEO, Virtual Assistants"></span>
+      </h2>
+    </div>
+  </section>
+
+  <!-- <div *ngIf="state === 'loading'" class="container d-flex h-100 flex-column justify-content-center text-center`">
+      <h4 class="fw-300">You'll need to add at least 100 CAN to your MetaMask in order to continue.</h4>
+    </div> -->
+
+  <!--
+    |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+    | MetaMask
+    |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+    !-->
+  <section *ngIf="state === 'metaMaskNotAvailable'" class="section bg-white py-10" id="section-main">
+    <div class="container">
+      <header class="section-header my-0 py-0">
+        <!-- <small>Features</small> -->
+        <h2 class="fw-300">Install MetaMask Wallet</h2>
+        <img src="assets/img/metamask.svg" width="140px" height="140px">
+        <h4 class="fw-300 mb-10">Why MetaMask needed!?</h4>
+        <!-- <h6 class="fw-300 mb-10">With MetaMask you can interract with the Ethereum network. Moreover, the benefit of MetaMask is that
+              <strong>YOU are storing your private keys</strong> instead of letting us to hold to your keys.</h6> -->
+
+        <div class="alert alert-info" role="alert">
+          With MetaMask you can interract with the Ethereum network. Moreover, the benefit of MetaMask is that
+          <strong>YOU are storing your private keys</strong> instead of letting us to hold to your keys.
+        </div>
+
+        <small class="lead text-danger">
+          <i class="fa fa-exclamation-triangle"></i>&nbsp;
+          <strong>IMPORTANT:</strong> remember to switch your MetaMask Wallet to Main Ethereum Network.
+        </small>
+        <hr>
+      </header>
+
+      <div class="row my-0 py-0">
+
+        <div class="col-12 col-md-6 col-xl-4 feature-1">
+          <p class="feature-icon">
+            <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn" target="_blank">
+              <img src="assets/img/metamask-download.png" width="auto" height="64px" alt="Install MetaMask">
+            </a>
+          </p>
+          <p class="fs-60 fw-900 opacity-10">1</p>
+          <h5>Install MetaMask on a desktop browser like&nbsp;
+            <img src="assets/img/chrome.svg" width="18px" height="18px" style="margin-top: -3px;">&nbsp;
+            <span class="fw-500">Chrome</span>.</h5>
+          <!-- <p class="text-muted"></p> -->
+          <!-- <div class="text-center gap-multiline-items-2 my-30">
+                  <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn" target="_blank">
+                    <img class="img-fadein" src="assets/img/metamask.png" alt="Install MetaMask">
+                  </a>
+                </div> -->
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4 feature-1">
+          <p class="feature-icon">
+            <img src="assets/img/metamask-action.png" width="auto" height="64px" alt="MetaMask Wallet">
+          </p>
+          <p class="fs-60 fw-900 opacity-10">2</p>
+          <h5>Open
+            <img src="assets/img/metamask-icon.png" width="18px" height="18px" style="margin-top: -3px;">&nbsp;MetaMask and create your Ethereum address where you'll deposit your ETH or CAN.</h5>
+          <p class="text-muted"></p>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4 feature-1">
+          <p class="feature-icon">
+            <img src="assets/img/metamask-pay.png" width="auto" height="64px" alt="MetaMask Wallet">
+          </p>
+          <p class="fs-60 fw-900 opacity-10">3</p>
+          <h5>Unlock your MetaMask Wallet (if needed) and reload the page.</h5>
+          <p class="text-muted"></p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="section-dialog bg-gray mb-30">
+      <p class="text-center">FAQ</p>
+      <br>
+      <div id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="card">
+          <div class="card-header bg-lighter" role="tab" id="headingOne">
+            <h5 class="mb-0">
+              <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                What do I need to use CanYa?
+              </a>
+            </h5>
+          </div>
+          <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+            <div class="card-block">
+              <p class="lead">Here’s what you need to get started:</p>
+              <ul>
+                <li>A computer or laptop running the desktop version of Chrome.</li>
+                <li>MetaMask, a digital wallet used specifically with web apps (
+                  <a href="https://metamask.io/" target="_blank">Install MetaMask</a> ).</li>
+                <li>CanYaCoins, a form of digital payment that powers CanYa.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header bg-lighter" role="tab" id="headingTwo">
+            <h5 class="mb-0">
+              <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                Installing MetaMask
+              </a>
+            </h5>
+          </div>
+          <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+            <div class="card-block">
+              <p class="lead">To use CanYa, you will need to install MetaMask, a digital wallet. You will need to put money in it to make
+                your first purchase.</p>
+              <p class="lead text-danger">
+                <strong>Note:</strong> A digital wallet like MetaMask acts like a bank account—treat it with respect and make sure
+                you don’t forget your password or the seed words.</p>
+              <iframe width="100%" height="315" src="https://www.youtube.com/embed/tfETpi-9ORs?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen=""></iframe>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header bg-lighter" role="tab" id="headingThree">
+            <h5 class="mb-0">
+              <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                Why is MetaMask locked?
+              </a>
+            </h5>
+          </div>
+          <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+            <div class="card-block">
+              <p class="lead">Occasionally the page displays a lock screen. This happens because MetaMask automatically locks your account
+                after a certain period of time. To unlock simply click on the MetaMask extension and type in your password.</p>
+              <img src="assets/img/metamask-locked.png">
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header bg-lighter" role="tab" id="headingFour">
+            <h5 class="mb-0">
+              <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                Getting CanYaCoins
+              </a>
+            </h5>
+          </div>
+          <div id="collapseFour" class="collapse" role="tabpanel" aria-labelledby="headingFour">
+            <div class="card-block">
+              <p class="lead">You will need to purchase CAN from an exchange, and then transfer the CAN from your exchange wallet to your
+                MetaMask Wallet. Unfortunately, you cannot use CanYa with only an exchange account.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!--
+      |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+      | Switch to MainNet
+      |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+      !-->
+  <section *ngIf="state === 'switchToMainNet'" class="section bg-white py-10" id="section-main">
+    <div class="container">
+      <header class="section-header my-0 py-0">
+        <h2 class="fw-300">Switch your MetaMask to Main Ethereum Network!</h2>
+        <img src="assets/img/metamask.svg" width="140px" height="140px">
+        <!-- <h4 class="fw-300 mb-10">Your MetaMask is not connected to Main Ethereum Network.</h4> -->
+        <h4 class="fw-300 mb-30">Open your wallet, switch your wallet to
+          <span class="fw-500">Main Ethereum Network</span> and reload the page.</h4>
+        <!-- <small class="lead text-danger">
+                <i class="fa fa-exclamation-triangle"></i>&nbsp;
+                <strong>IMPORTANT:</strong> You can 'buy' ether (ETH) in MetaMask (Main Ethereum Network Faucet). Remember to switch your MetaMask Wallet to Main Ethereum Network.
+              </small> -->
+
+        <!-- <img src="assets/img/metamask-buy.png"> -->
+      </header>
+    </div>
+
+  </section>
+
+  <!--
+      |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+      | Unlock MetaMask
+      |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+      !-->
+  <section *ngIf="state === 'walletLocked'" class="section bg-white py-10" id="section-main">
+    <div class="container">
+      <header class="section-header my-0 py-0">
+        <h2 class="fw-300">Your MetaMask is locked!</h2>
+        <img src="assets/img/metamask.svg" width="140px" height="140px">
+        <h4 class="fw-300 mb-10">Open MetaMask and follow the instructions to unlock it, reload the page and try again.</h4>
+
+        <!-- Remember to switch your MetaMask Wallet to Main Ethereum Network. -->
+        <small class="lead text-danger">
+          <i class="fa fa-exclamation-triangle"></i>&nbsp;
+          <strong>NOTE:</strong> You can 'buy' ether (ETH) in your MetaMask wallet.
+        </small>
+
+        <img src="assets/img/metamask-buy.png">
+      </header>
+    </div>
+
+  </section>
+
+  <!--
+      |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+      | Buy CAN
+      |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+      !-->
+  <section *ngIf="state === 'buyCAN'" class="section bg-white py-10" id="section-main">
+    <div class="container">
+      <header class="section-header my-0 py-0">
+        <h2 class="fw-300">Buy CAN</h2>
+        <img src="assets/img/round-icon.svg" width="140px" height="140px">
+        <h4 class="fw-300 my-10">You will need to add at least 100 CAN to your MetaMask in order to continue.</h4>
+
+        <!-- Remember to switch your MetaMask Wallet to Main Ethereum Network. -->
+        <!-- <small class="lead text-danger">
+                <i class="fa fa-exclamation-triangle"></i>&nbsp;
+                <strong>NOTE:</strong> You can 'buy' ether (ETH) in your MetaMask wallet.
+              </small> -->
+        <br>
+        <br>
+
+        <h4 class="fw-300 px-10">Now available on:</h4>
+        <a class="btn btn-primary my-1" href="https://www.kucoin.com/" target="_blank" data-label="KuCoin">KuCoin</a>
+        <a class="btn btn-primary my-1" href="https://www.aex.com/" target="_blank" data-label="AEX">AEX</a>
+        <a class="btn btn-primary my-1" href="https://xbrick.io/" target="_blank" data-label="XBrick">XBrick</a>
+        <a class="btn btn-primary my-1" href="https://www.cryptopia.co.nz/" target="_blank" data-label="Cryptopia">Cryptopia</a>
+        <a class="btn btn-primary my-1" href="https://www.fatbtc.com/" target="_blank" data-label="Fatbtc">Fatbtc</a>
+        <a class="btn btn-primary my-1" href="https://www.coinspot.com.au/" target="_blank" data-label="CoinSpot">CoinSpot</a>
+        <a class="btn btn-primary my-1" href="https://etherdelta.com/#0x1d462414fe14cf489c7a21cac78509f4bf8cd7c0-ETH" target="_blank"
+          data-label="EtherDelta">EtherDelta</a>
+        <a class="btn btn-primary my-1" href="https://coss.io/" target="_blank" data-label="COSS.IO">COSS.IO</a>
+        <a class="btn btn-primary my-1" href="https://www.qryptos.com/" target="_blank" data-label="QRYPTOS">QRYPTOS</a>
+        <a class="btn btn-primary my-1" href="https://radarrelay.com/" target="_blank" data-label="Radar Relay">Radar Relay</a>
+        <a class="btn btn-primary my-1" href="https://idex.market/" target="_blank" data-label="IDEX">IDEX</a>
+        <a class="btn btn-primary my-1" href="https://www.bancor.network/discover" target="_blank" data-label="Bancor">Bancor</a>
+
+      </header>
+    </div>
+
+  </section>
+
+  <!--
+    |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+    | Access Denied
+    |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+    !-->
+  <section *ngIf="state === 'accessDenied'" class="section bg-white py-10" id="section-main">
+    <div class="container">
+      <header class="section-header my-0 py-0">
+        <h2 class="fw-300 text-danger">
+          <i class="fa fa-exclamation-triangle"></i>&nbsp;Access Denied</h2>
+        <img src="assets/img/metamask.svg" width="140px" height="140px">
+
+        <h4 class="fw-300 mb-30">Sorry, your MetaMask address doesn't have access to this page.</h4>
+        <h4 class="fw-500 mb-30">Please, switch to your whitelisted account.</h4>
+      </header>
+    </div>
+  </section>
+
+  <!--
+    |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+    | Main section
+    |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+    !-->
+  <section *ngIf="state === 'logged'" class="bg-white pt-5 pb-30 min-70" id="section-main">
+    <div class="container">
+
+      <div class="row">
+        <div class="col-12">
+
+          <div class="col-4 offset-8">
+            <div class="align-items-center text-center align-self-center">
+            </div>
+
+            <!-- <ul class="nav">
+                    <li class="nav-item">
+                      <a class="nav-link active" [ngClass]="{'active': currentTab === 'New' }" data-toggle="tab" href="#tab-1" (click)="onTab('New');">
+                        <h6 class="mb-0 pb-0">New</h6>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" [ngClass]="{'active': currentTab === 'Pioneers' }" data-toggle="tab" href="#tab-2" (click)="onTab('Pioneers');">
+                        <h6 class="mb-0 pb-0">Pioneers</h6>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" [ngClass]="{'active': currentTab === 'Rejected' }" data-toggle="tab" href="#tab-3" (click)="onTab('Rejected');">
+                        <h6 class="mb-0 pb-0">Rejected</h6>
+                      </a>
+                    </li>
+                  </ul> -->
+          </div>
+          <h6 *ngIf="currentTab === 'All'" class="my-0 py-0 text-right">{{total}}&nbsp;applications</h6>
+          <h6 *ngIf="currentTab === 'Pioneers'" class="my-0 py-0 text-right">{{pioneers.length}}&nbsp;pioneers</h6>
+          <h6 *ngIf="currentTab === 'Rejected'" class="my-0 py-0 text-right">{{rejected.length}}&nbsp;rejected</h6>
+        </div>
+      </div>
+
+      <!-- <div *ngIf="(page.data | async)?.length < 1" class="container d-flex h-100 flex-column justify-content-center">
+          <img src="assets/img/loader.svg" height="36px" alt="Loader">
+        </div> -->
+
+      <div class="row">
+
+        <!-- <div class="col-12 col-md-3">
+            <ul class="nav nav-vertical br-1">
+              <li class="nav-item">
+                <a class="nav-link active" [ngClass]="{'active': currentTab === 'New' }" data-toggle="tab" href="#tab-1" (click)="onTab('New');">
+                  <h6 class="mb-0 pb-0">New</h6>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" [ngClass]="{'active': currentTab === 'Pioneers' }" data-toggle="tab" href="#tab-2" (click)="onTab('Pioneers');">
+                  <h6 class="mb-0 pb-0">Pioneers</h6>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" [ngClass]="{'active': currentTab === 'Rejected' }" data-toggle="tab" href="#tab-3" (click)="onTab('Rejected');">
+                  <h6 class="mb-0 pb-0">Rejected</h6>
+                </a>
+              </li>
+            </ul>
+          </div> -->
+
+        <div class="col-12">
+          <div class="tab-content">
+            <div id="tab-1" class="tab-pane" [ngClass]="{'fade': currentTab === 'All', 'show': currentTab === 'All', ' active': currentTab === 'All' }">
+
+              <div infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="onScroll($event);">
+
+                <app-grid [providers]="page.data | async" 
+                  [hideActivateProfile]="true"
+                  (addToWhitelist)="onAddToWhitelist($event);" 
+                  (activateProfile)="onActivateProfile($event);"
+                  (rejectProvider)="onRejectProvider($event);"></app-grid>
+              </div>
+
+            </div>
+
+            <div id="tab-2" class="tab-pane fade" [ngClass]="{'fade': currentTab === 'Pioneers', 'show': currentTab === 'Pioneers', ' active': currentTab === 'Pioneers' }">
+              <app-grid [providers]="pioneers" 
+                [hideAddToWhitelist]="true" 
+                (addToWhitelist)="onAddToWhitelist($event);" 
+                (activateProfile)="onActivateProfile($event);"
+                (rejectProvider)="onRejectProvider($event);"></app-grid>
+            </div>
+
+            <div id="tab-3" class="tab-pane" [ngClass]="{'fade': currentTab === 'Rejected', 'show': currentTab === 'Rejected', ' active': currentTab === 'Rejected' }">
+              <app-grid [providers]="rejected" 
+                [hideAddToWhitelist]="true" 
+                [hideActivateProfile]="true" 
+                [hideRejectProvider]="true" 
+                (addToWhitelist)="onAddToWhitelist($event);"
+                (activateProfile)="onActivateProfile($event);" 
+                (rejectProvider)="onRejectProvider($event);"></app-grid>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="page.loading | async" class="container d-flex h-100 flex-column justify-content-center">
+        <img src="assets/img/loader.svg" height="36px" alt="Loader">
+      </div>
+
+    </div>
+  </section>
+
+  <!--
+    |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+    | Subscribe
+    |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+    !-->
+  <!-- <section *ngIf="state === 'logged'" class="section shadow-1 hidden-print" style="background-image: linear-gradient(122deg, #3cf, #01fecd);">
+      <div class="container text-center">
+  
+        <div class="row mt-20 align-items-center">
+          <div class="col-12 text-center">
+            <img src="assets/img/logo-light.svg" alt="CanYa - telegram" width="auto" height="60px">
+            <h4 class="text-white pt-25">The World’s Best Blockchain-Powered Marketplace of Services.</h4>
+            <br>
+            <a href="https://canya.com" target="_blank" class="btn btn-lg btn-primary shadow-3">Join Now</a>
+          </div>
+        </div>
+  
+      </div>
+    </section> -->
+
+</main>
+<!-- END Main container -->
+
+<app-footer *ngIf="state === 'logged'"></app-footer>
+
+<a class="scroll-top" href="#">
+  <i class="fa fa-angle-up"></i>
+</a>

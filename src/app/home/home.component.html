@@ -1,0 +1,110 @@
+<!-- Topbar -->
+<nav class="topbar topbar-expand-md topbar-sticky" id="section-top">
+  <div class="container">
+
+    <div class="topbar-left">
+      <button class="topbar-toggler text-gray">&#9776;</button>
+      <a class="topbar-brand" [routerLink]="['/home']">
+        <!-- <img class="logo-inverse" src="assets/img/logo.svg" width="136px" alt="logo"> -->
+        <img class="logo-default" src="assets/img/logodao.svg" width="auto" height="36px" alt="logo">
+      </a>
+    </div>
+
+    <div class="topbar-right">
+
+      <a href="https://etherscan.io/address/0x17b4ae55a5b0b6c10b0f4bae2d75a4e83de41709" class="btn btn-primary btn-outline btn-sm hidden-sm-down"
+        target="_blank">
+        Check contract
+      </a>
+
+    </div>
+
+  </div>
+</nav>
+<!-- END Topbar -->
+
+<!-- Header -->
+<header class="header fadeout pt-10 pb-0 mb-0" id="section-home">
+  <div class="container">
+    <div class="row partner mt-25 sub-header-menu">
+
+    </div>
+  </div>
+</header>
+<!-- END Header -->
+
+<!-- Main container -->
+<main class="main-content">
+
+  <!--
+    |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+    | Starting
+    |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+    !-->
+  <section class="section bg-white py-10" id="section-main">
+    <div class="container">
+      <header class="section-header my-0 py-0">
+
+        <h2 class="fw-300">Welcome to
+          <img class="logo-default" src="assets/img/logodao.svg" width="auto" height="28px" alt="logo" style="margin-top: -8px;">!
+        </h2>
+        <img src="assets/img/Pioneers1.jpg" width="auto" height="240px">
+        <!-- <p class="lead fw-400">Decentralised autonomous organisation that supports the CanYa ecosystem.</p> -->
+
+        <h4 class="fw-300 my-1">The Decentralised Autonomous Organisation that supports the CanYa ecosystem.</h4>
+        <a class="btn btn-primary btn-lg mt-1 mb-30" [routerLink]="['/dashboard']">JOIN CANYADAO</a>
+
+      </header>
+
+      <div class="row justify-content-center mb-30">
+        <div class="col-8 p-20 bg-gray" border-5>
+          <!-- <p class="text-center">
+          <img src="assets/img/logo.svg" width="auto" height="28px" alt="CanYaDAO">
+        </p>
+        <br> -->
+          <h4 class="fw-300 text-center">What is
+              <img class="logo-default" src="assets/img/logodao.svg" width="auto" height="28px" alt="logo" style="margin-top: -8px;">?</h4>
+
+          <p class="lead text-dark">CanYaDAO is the decentralised autonomous organisation that supports the CanYa ecosystem.</p>
+
+          <p class="lead text-dark">CanYa members can choose to enter the DAO by staking tokens and then selecting from a number of daily tasks to
+            help run the ecosystem. Each task once complete will pay out $CAN tokens to the member and important tasks are
+            prioritised with increasing amounts of $CAN. Tasks include curation, user and provider support tickets, dispute
+            resolution, categorisation and tagging. Complex and important tasks (such as dispute resolution) are decided
+            upon by a consensus decision from random DAO members.</p>
+
+          <p class="lead text-dark">DAO members can report other DAO members that act maliciously and earn their stake if the malicious member is determined
+            by consensus to be malicious.</p>
+
+          <p class="lead fw-500 text-center">The outcome is an organisation that can run the CanYa ecosystem in a permissionless, decentralised and autonomous
+            way.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!--
+    |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+    | Subscribe
+    |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+    !-->
+  <section class="section shadow-1 hidden-print" style="background-image: linear-gradient(122deg, #3cf, #01fecd);">
+    <div class="container text-center">
+
+      <div class="row mt-20 align-items-center">
+        <div class="col-12 text-center">
+          <img src="assets/img/logo-light.svg" alt="CanYa - telegram" width="auto" height="60px">
+          <h4 class="text-white pt-25">The World’s Best Blockchain-Powered Marketplace of Services.</h4>
+          <br>
+          <a href="https://canya.com" target="_blank" class="btn btn-lg btn-primary shadow-3">Join Now</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+<!-- END Main container -->
+
+<app-footer></app-footer>

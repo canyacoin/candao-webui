@@ -1,0 +1,95 @@
+<!-- <ng-template ngFor let-i="index" let-pioneer [ngForOf]="pioneers"> -->
+
+<!-- no-gutters pricing-4 -->
+<div class="row" border-5>
+  <!-- <span class="popular-tag" style="background:#3cf; float:right;">Pioneer</span> -->
+
+  <!-- <div class="col-12 col-md-3 card">
+                      <img class="card-img-top" src="assets/img/Pioneers1.jpg" alt="Pioneer">
+                      <div class="card-block px-20 py-0">
+                      </div>
+                    </div> -->
+
+  <div *ngFor="let provider of providers;let i = index;" class="col-12">
+    <div class="card card-hover-shadow bg-white my-5 b-2">
+      <div class="pt-20" style="position: absolute; top: 0px; right: 20px;">
+        <!-- class="btn btn-primary p-5" -->
+        <a [href]="'https://canya.com/search/' + provider.name" class="btn btn-canya-tools text-white" target="_blank">
+          <i class="ti-user fs-14"></i>&nbsp;Profile
+        </a>
+        <!-- <a [href]="provider.mailto" class="btn btn-canya-tools text-white p-5">
+                          <i class="fa fa-comment-o text-white fs-14"></i>
+                        </a> -->
+      </div>
+      <div class="card-block px-30 py-0 mb-20">
+
+        <div class="row">
+          <div class="col-1 justify-content-center text-center">
+              <img gravatar [email]="provider.email" [size]="100" [fallback]="'identicon'" class="mt-40" border-5>
+          </div>
+          <div class="col-9">
+              <h5 *ngIf="provider.name !== 'Empty'" class="my-0 pt-20">{{provider.name}}</h5>
+
+              <label *ngIf="provider.why !== 'Empty'" class="my-1 pt-1 fw-500 bt-1">Why do you want to be in the CanYa Pioneers?</label>
+              <p *ngIf="provider.why !== 'Empty'" class="my-1 pb-1 bb-1">{{provider.why}}</p>
+          </div>
+        </div>
+
+        <label *ngIf="provider.value !== 'Empty'" class="my-1 pt-1 fw-500">What will you bring to CanYa?</label>
+        <p *ngIf="provider.value !== 'Empty'" class="my-1 pb-1 bb-1">{{provider.value}}</p>
+
+        <label *ngIf="provider.crypto !== 'Empty'" class="my-1 pt-1 fw-500">Do you hold cryptocurrency?</label>
+        <p *ngIf="provider.crypto !== 'Empty'" class="my-1 pb-1 bb-1">{{provider.crypto}}</p>
+
+        <label *ngIf="provider.canya !== 'Empty'" class="my-1 pt-1 fw-500">Do you have CanYaCoin (CAN tokens)?</label>
+        <p *ngIf="provider.canya !== 'Empty'" class="my-1 pb-1 bb-1">{{provider.canya}}</p>
+
+        <label *ngIf="provider.feedback !== 'Empty'" class="my-1 pt-1 fw-500">Will you pledge to give us feedback?</label>
+        <p *ngIf="provider.feedback !== 'Empty'" class="my-1 pb-1 bb-1">{{provider.feedback}}</p>
+
+        <a *ngIf="provider.ethAddress !== 'Empty'" class="social-telegram d-block mb-5" [href]="'https://etherscan.io/address/' + provider.ethAddress"
+          target="_blank">
+          <i class="cc ETH"></i>
+          {{provider.ethAddress}}
+        </a>
+
+        <a *ngIf="provider.email !== 'Empty'" class="social-telegram d-block mb-5" [href]="provider.mailto">
+          <i class="fa fa-envelope-o"></i>
+          {{provider.email}}&nbsp;
+          <small class="text-primary p-1 b-1" style="border-color: #3cf;" border-5>Send Email</small>
+        </a>
+        <a *ngIf="provider.telegram !== 'Empty'" class="social-telegram d-block mb-5" [href]="'https://t.me/' + provider.telegram.replace('@', '')"
+          target="_blank">
+          <i class="fa fa-telegram"></i>
+          {{provider.telegram.replace('@', '')}}&nbsp;
+          <small class="text-primary p-1 b-1" style="border-color: #3cf;" border-5>Open Chat</small>
+        </a>
+        <a *ngIf="provider.resume !== 'Empty'" class="social-telegram d-block mb-5" [href]="provider.resume" target="_blank">
+          <i class="fa fa-cloud-download"></i>
+          Download Resume
+        </a>
+        <a *ngIf="provider.portfolio !== 'Empty'" class="social-telegram d-block mb-10" [href]="provider.portfolio" target="_blank">
+          <i class="fa fa-external-link"></i>
+          Link
+        </a>
+
+        <small *ngIf="provider.category['Content Creator'] !== 'Empty'" class="text-primary b-1" style="border-color: #3cf;" border-5>&nbsp;{{ provider.category['Content Creator'] }}&nbsp;</small>
+        <small *ngIf="provider.category['Graphics Designers'] !== 'Empty'" class="text-primary b-1" style="border-color: #3cf;" border-5>&nbsp;{{ provider.category['Graphics Designers'] }}&nbsp;</small>
+        <small *ngIf="provider.category['Software Developers'] !== 'Empty'" class="text-primary b-1" style="border-color: #3cf;" border-5>&nbsp;{{ provider.category['Software Developers'] }}&nbsp;</small>
+        <small *ngIf="provider.category['Virtual Assistants'] !== 'Empty'" class="text-primary b-1" style="border-color: #3cf;" border-5>&nbsp;{{ provider.category['Virtual Assistants'] }}&nbsp;</small>
+        <small *ngIf="provider.category['Other'] !== 'Empty'" class="text-primary b-1" style="border-color: #3cf;" border-5>&nbsp;{{ provider.other }}&nbsp;</small>
+        <!-- <small *ngIf="provider.other !== 'Empty'" class="text-primary b-1" style="border-color: #3cf;" border-5>&nbsp;{{  }}&nbsp;</small> -->
+      </div>
+
+      <div class="card-footer bg-gray text-right" style="border-top: none;">
+        <span *ngIf="provider.confirming"><img src="assets/img/loader.svg" height="36px" alt="Loader">(Pending Confirmation)</span>
+        <button [hidden]="hideAddToWhitelist" (click)="onAddToWhitelist(i, provider.ethAddress);" class="btn btn-secondary my-1">Add to whitelist</button>
+        <button [hidden]="hideActivateProfile" (click)="onActivateProfile(i, provider.ethAddress);" class="btn btn-primary my-1">Activate profile</button>
+        <button [hidden]="hideRejectProvider" (click)="onRejectProvider(i, provider.ethAddress);" class="btn btn-danger my-1">Reject provider</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- <br> -->
+<!-- </ng-template> -->

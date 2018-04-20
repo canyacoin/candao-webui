@@ -1,0 +1,217 @@
+<!-- Topbar -->
+<nav class="topbar topbar-expand-md topbar-sticky" id="section-top">
+  <div class="container">
+
+    <div class="topbar-left">
+      <button class="topbar-toggler text-gray">&#9776;</button>
+      <a class="topbar-brand" [routerLink]="['/home']">
+        <!-- <img class="logo-inverse" src="assets/img/logo.svg" width="136px" alt="logo"> -->
+        <img class="logo-default" src="assets/img/logodao.svg" width="auto" height="36px" alt="logo">
+      </a>
+    </div>
+
+    <div class="topbar-right">
+      <ul class="topbar-nav nav">
+        <li class="nav-item">
+          <a [routerLink]="['/dashboard']" class="nav-link" data-scrollto="section-home">Return to Dashboard</a>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</nav>
+<!-- END Topbar -->
+
+<!-- Header -->
+<header class="header fadeout pt-10 pb-0 mb-0" id="section-home">
+  <div class="container">
+    <div class="row partner mt-25 sub-header-menu">
+
+    </div>
+  </div>
+</header>
+<!-- END Header -->
+
+<!-- Main container -->
+<main class="main-content">
+
+  <!--
+    |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+    | Main section section my-0 py-0 min-70
+    |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+    !-->
+  <section class="bg-white pt-5 pb-30 min-70" id="section-main">
+
+    <header class="section-header my-0 py-0">
+      <!-- <small></small> -->
+      <h2 *ngIf="currentTab === 'Admins'">Manage Admins</h2>
+      <h2 *ngIf="currentTab === 'Mods'">Manage Mods</h2>
+      <h2 *ngIf="currentTab === 'Badge'">Current Badge: {{ currentBadge }}</h2>
+
+
+      <a [routerLink]="['/dashboard']">
+        <i class="ti-angle-left text-default fs-24" style="position: fixed; top: 105px; left: 18%;"></i>
+      </a>
+
+      <!-- <p class="lead fw-400">Edit your details:</p> -->
+      <hr>
+    </header>
+
+    <div class="container">
+
+      <div class="row">
+
+        <div class="col-12 col-md-3">
+          <ul class="nav nav-vertical br-1">
+            <li class="nav-item mx-10">
+              <a class="nav-link active" [ngClass]="{'active': currentTab === 'Admins' }" data-toggle="tab" href="#tab-1" (click)="currentTab = 'Admins'">
+                <h6 class="mb-0 pb-0">Admins</h6>
+              </a>
+            </li>
+            <li class="nav-item mx-10">
+              <a class="nav-link" [ngClass]="{'active': currentTab === 'Mods' }" data-toggle="tab" href="#tab-2" (click)="currentTab = 'Mods'">
+                <h6 class="mb-0 pb-0">Mods</h6>
+              </a>
+            </li>
+            <li class="nav-item mx-10">
+              <a class="nav-link" [ngClass]="{'active': currentTab === 'Badge' }" data-toggle="tab" href="#tab-3" (click)="currentTab = 'Badge'">
+                <h6 class="mb-0 pb-0">Badge</h6>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-12 col-md-9">
+          <div class="tab-content">
+            <div id="tab-1" class="tab-pane" [ngClass]="{'fade': currentTab === 'Admins', 'show': currentTab === 'Admins', ' active': currentTab === 'Admins' }">
+
+              <div class="row">
+                <div class="col-12 col-md-8 offset-md-1 bg-gray p-20" border-5>
+                  <form [formGroup]="adminForm" (ngSubmit)="onAddUser('admins')" class="form form-round validate" novalidate>
+                    <div class="form-group">
+                      <label class="fw-400">Add Admin</label>
+                      <input class="form-control" #ethAddress formControlName="ethAddress" type="text" name="ethAddress" placeholder="ETH address"
+                        maxlength="50" [class.invalid]="!adminForm.controls.ethAddress.valid && adminForm.controls.ethAddress.dirty">
+
+                      <small *ngIf="!adminForm.controls.ethAddress.valid  && adminForm.controls.ethAddress.dirty">Please enter a valid
+                        <strong>Mainnet ETH address</strong>.</small>
+
+                      <br>
+
+                      <button [disabled]="!adminForm.valid || sending" type="submit" class="btn btn-canya-tools text-white" style="float: right;">
+                        Add Admin
+                      </button>
+
+                      <span *ngIf="sending"><img src="assets/img/loader.svg" height="36px" alt="Loader">(Pending Confirmation)</span>
+                    </div>
+
+                  </form>
+                </div>
+              </div>
+
+              <br>
+
+              <div *ngFor="let admin of admins" class="row text-center my-10">
+                <div class="col-12 col-md-8 offset-md-1 bg-gray b-1" border-5>
+                  <div class="media align-items-center">
+                    <div class="media-body">
+                      <h6 class="mt-4 mb-0 fw-400">{{ admin.ethAddress }}</h6>
+                      <p *ngIf="admin.removing"><img src="assets/img/loader.svg" height="36px" alt="Loader">(Removing...)</p>
+                    </div>
+                    <button (click)="onDeleteUser('admins', admin);" class="btn btn-danger" border-none>
+                      <span class="fs-14" aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div id="tab-2" class="tab-pane fade" [ngClass]="{'fade': currentTab === 'Mods', 'show': currentTab === 'Mods', ' active': currentTab === 'Mods' }">
+
+                <div class="row">
+                    <div class="col-12 col-md-8 offset-md-1 bg-gray p-20" border-5>
+                      <form [formGroup]="modForm" (ngSubmit)="onAddUser('mods')" class="form form-round validate" novalidate>
+                        <div class="form-group">
+                          <label class="fw-400">Add Mod</label>
+                          <input class="form-control" #ethAddress formControlName="ethAddress" type="text" name="ethAddress" placeholder="ETH address"
+                            maxlength="50" [class.invalid]="!modForm.controls.ethAddress.valid && modForm.controls.ethAddress.dirty">
+    
+                          <small *ngIf="!modForm.controls.ethAddress.valid  && modForm.controls.ethAddress.dirty">Please enter a valid
+                            <strong>Mainnet ETH address</strong>.</small>
+    
+                          <br>
+    
+                          <button [disabled]="!modForm.valid || sending" type="submit" class="btn btn-canya-tools text-white" style="float: right;">
+                            Add Mod
+                          </button>
+    
+                          <span *ngIf="sending"><img src="assets/img/loader.svg" height="36px" alt="Loader">(Pending Confirmation)</span>
+                        </div>
+    
+                      </form>
+                    </div>
+                  </div>
+    
+                  <br>
+    
+                  <div *ngFor="let mod of mods" class="row text-center my-10">
+                    <div class="col-12 col-md-8 offset-md-1 bg-gray b-1" border-5>
+                      <div class="media align-items-center">
+                        <div class="media-body">
+                          <h6 class="mt-4 mb-0 fw-400">{{ mod.ethAddress }}</h6>
+                          <p *ngIf="mod.removing"><img src="assets/img/loader.svg" height="36px" alt="Loader">(Removing...)</p>
+                        </div>
+                        <button (click)="onDeleteUser('mods', mod);" class="btn btn-danger" border-none>
+                          <span class="fs-14" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+            </div>
+
+            <div id="tab-3" class="tab-pane" [ngClass]="{'fade': currentTab === 'Badge', 'show': currentTab === 'Badge', ' active': currentTab === 'Badge' }">
+
+                <div class="row">
+                    <div class="col-12 col-md-8 offset-md-1 bg-gray p-20" border-5>
+
+                      <!-- <mark class="lead text-dark" border-5>Current badge: {{ currentBadge }}</mark> -->
+
+                      <form [formGroup]="badgeForm" (ngSubmit)="onChangeBadge()" class="form form-round validate" novalidate>
+                        <div class="form-group">
+                          <label class="fw-400">Set current badge</label>
+                          <input class="form-control" #badge formControlName="badge" type="text" name="badge" placeholder="New badge"
+                            maxlength="32" [class.invalid]="!badgeForm.controls.badge.valid && badgeForm.controls.badge.dirty">
+    
+                          <small *ngIf="!badgeForm.controls.badge.valid  && badgeForm.controls.badge.dirty">Please enter a valid badge (min.2 - max.32).</small>
+    
+                          <br>
+    
+                          <button [disabled]="!badgeForm.valid || sending" type="submit" class="btn btn-canya-tools text-white" style="float: right;">
+                            Set Badge
+                          </button>
+    
+                          <span *ngIf="sending"><img src="assets/img/loader.svg" height="36px" alt="Loader">(Pending Confirmation)</span>
+                        </div>
+    
+                      </form>
+                    </div>
+                  </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+<!-- END Main container -->
+
+<app-footer></app-footer>
+
+<a class="scroll-top" href="#">
+  <i class="fa fa-angle-up"></i>
+</a>
