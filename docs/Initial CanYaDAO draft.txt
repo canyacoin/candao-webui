@@ -1,0 +1,74 @@
+---------------------------------
+Universal CanYaDAO Initial Draft
+---------------------------------	
+
+Organisation is an entity that "employees" people to do "tasks" then "pays" them.
+
+DAO is a borderless organisation that exists everywhere.
+
+CanYaDAO is an outsource DAO that manages employees to do tasks defined by other clients "Apps"
+
+CanYaDAO 
+	Entities:
+		- DAOEmp: a user joins the DAO and stakes CAN tokens
+		- Role (Mod/Admin/...etc): set of permissions assigned to users based on their staked tokens, employment period and rating
+		- Task: A guid defined by external actor (App/Client) describes what the task is and how to complete it.
+		- App: DAO client that defines tasks to be carried out by DAO employees
+	Flow:
+		- A client registers at CanYaDAO and get a clientID & auth tokens
+		- The client login, create task and stakes the task max payable in return he gets a successTriggerURL
+		- DAO display the task to relevant DAOEmp
+		- DAOEmp logins to the client APP
+		- The client authenticates the DAOEmp by calling the DAO "auth" endpoint passing through the DAOEmp credentials (address or username * pass)
+		- DAOEmp execute the task as per defined
+		- The client calls the successTriggerURL when a task is completed as per his criteria passing through the employee address, appRefId
+		- Task is considered completed if the task defined capacity is reached (ex: 500 application processed)
+		- Task may contain expiry time or continue till terminated rule
+		- A client needs to charge his account (stake tokens) when it goes below a given threshold 
+	API:
+		- POST /CanYaDAO/Auth: 					autehnticates a DAOEmp by address or email/pass
+		- POST /CanYaDAO/task: 					creates a new task
+		- PUT  /CanYaDAO/task/id: 				updates a task
+		- POST /CanYaDAO/client: 				creates a new client and returns client id
+		- GET  /CanYaDAO/oauth/: 				returns bearer authentication token to the client app
+		- GET  /CanYaDAO/client/id/balance 		returns remaining account balance
+		- GET  /CanYaDAO/task/id/balance 		returns remaining task balance
+		- POST /CanYaDAO/task/id/complete 		increments the task processed records and pays the DAOEmp
+
+
+CanYaDAO Employee Signup:
+	- Capture email, mobile, name, ethAddress during signup.
+	- Verify Email/Mobile "Try to minimize number of duplicate accounts that we may get".
+	- Later, we can add a 1 minute video interview to confirm the person identity and this can be another task for other mods/admins.
+
+Task Definition:
+	- Define the goal/description
+	- Define completion action "Final event to be triggered that indicates task is completed"
+	- Define "measured" criteria to be followed by moderators/admins to complete the task
+	- Specify min/max CAN offered and rising interval (increase the min every X interval if no activity on the task)
+	- Accepted consensus number (Number of times the task where processed by mods/admins)	
+	- Access level "Moderators/Admin/Power Admins"
+	- Access Steps "How to execute the task"
+
+	Ex: Up/Down vote an application
+		- Goal: Evaluate the applications based on the sepcified critiera
+		- CompletionAction: Click up vote or down vote buttons
+		- Consensus: 10 "Don't show the application to any more DAOEmp after getting 10 votes up or down"
+		- AccessLevel: Moderators
+		- Access Steps: 
+			- Login to CanYa.com.au/controlpanel
+			- Click Providers list
+			- Go through the provider details
+			- Click UpVote/DownVote based on the evaluation criteria		
+		- EvaluationCritiera:
+		  UpVote if the assessment >= 5 points. Points are estimated based on the quality/effectivness of the answer.
+			- Why do you need to be in CanYa Pioneers? 0-2 points
+			- What will you bring to CanYa? 0-5 points
+			- Do you have CanYaCoin? 0-1 point
+			- Will you pledge to give us feedback? 0-3 points
+			- Resume attached? 0-2 points
+			- Has Email 0-1 point
+			- Has Telegram 0-1 point	
+
+
+
