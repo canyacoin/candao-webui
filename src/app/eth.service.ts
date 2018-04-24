@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/operator/share';
+import { environment } from '../environments/environment';
 
 declare let require: any;
 
@@ -27,6 +28,7 @@ export class EthService {
     this.web3InitObservable = new Observable((wobserver) => {
       this.web3InitObserver = wobserver;
     }).share();
+    
     this.web3InitObservable.subscribe();
 
     this.initWeb3();
@@ -41,7 +43,7 @@ export class EthService {
         this.web3InitObserver.next({ isMetaMaskAvailable: this.web3.currentProvider.isMetaMask, isWalletUnlocked: false, netId: -1 });
 
         this.web3.eth.net.getId().then(async (netId) => {
-          if (netId !== 1) {
+          if (environment.production && netId !== 1) {
             this.web3InitObserver.next({ isMetaMaskAvailable: this.web3.currentProvider.isMetaMask, isWalletUnlocked: false, netId: netId });
           } else {
             this.web3.eth.getAccounts(async (err, accs) => {

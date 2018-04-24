@@ -7,6 +7,7 @@ import 'rxjs/add/operator/take';
 
 import { EthService } from '../eth.service';
 import { TypeformService } from '../typeform.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-dashboard',
@@ -47,7 +48,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     // this.activatedRoute.params.subscribe((params) => {
-      // PARAM? = params['query'] ? params['query'] : '';
+    // PARAM? = params['query'] ? params['query'] : '';
     // });
     if (this.state === 'loading') {
       this.getWeb3State();
@@ -56,18 +57,18 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   getWeb3State() {
     this.ethService.initWeb3();
-    this.ethService.web3InitObservable.subscribe( async (state) => {
+    this.ethService.web3InitObservable.subscribe(async (state) => {
       console.log('getWeb3State - state', state);
       if (!state.isMetaMaskAvailable) {
         this.state = 'metaMaskNotAvailable';
-      } else if (state.isMetaMaskAvailable && state.netId !== 1) {
+      } else if (state.isMetaMaskAvailable && environment.production && state.netId !== 1) {
         this.state = 'switchToMainNet';
-      } else if (state.isMetaMaskAvailable && state.netId === 1 && !state.isWalletUnlocked) {
+      } else if (state.isMetaMaskAvailable && environment.production && state.netId === 1 && !state.isWalletUnlocked) {
         this.state = 'walletLocked';
       } else {
-        if ( this.ethService.account ) {
+        if (this.ethService.account) {
           const isMod = await this.ethService.isMod();
-          if ( isMod ) {
+          if (isMod) {
             this.state = 'logged';
             // this.ethService.addAdmin();
           } else {
@@ -84,36 +85,36 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   cacheItem(collection: string, item: any) {
-    setTimeout( () => {
-      this.afs.collection( collection ).doc( item.ethAddress ).set( item );
-    }, 1000 );
+    setTimeout(() => {
+      this.afs.collection(collection).doc(item.ethAddress).set(item);
+    }, 1000);
     // this.afs.collection( collection ).doc( item.ethAddress ).snapshotChanges().take(1).subscribe( (snap: any) => {
     //   return snap.payload.exists ? this.afs.collection( collection ).doc( item.ethAddress ).update( item ) : this.afs.collection( collection ).doc( item.ethAddress ).set( item );
     // });
   }
 
   removeItem(collection: string, item: any) {
-    setTimeout( () => {
-      this.afs.collection( collection ).doc( item.ethAddress ).delete();
-    }, 1000 );
+    setTimeout(() => {
+      this.afs.collection(collection).doc(item.ethAddress).delete();
+    }, 1000);
   }
 
   updatePioneers() {
-    this.typeformService.getPioneers().subscribe( (typeformData: Array<any>) => {
+    this.typeformService.getPioneers().subscribe((typeformData: Array<any>) => {
       // console.log('updatePioneers', typeformData, typeformData instanceof Array);
-      if ( typeformData instanceof Array ) {
+      if (typeformData instanceof Array) {
         this.total = typeformData.length;
-        typeformData.map( async (item) => {
-          const isProvider = await this.ethService.isProvider( item.ethAddress );
-          const isRejected = await this.ethService.isRejected( item.ethAddress );
+        typeformData.map(async (item) => {
+          const isProvider = await this.ethService.isProvider(item.ethAddress);
+          const isRejected = await this.ethService.isRejected(item.ethAddress);
 
           // console.log('updatePioneers', isProvider, isRejected);
 
-          if ( isRejected ) {
+          if (isRejected) {
             this.removeItem('all', item);
             this.removeItem('providers', item);
             this.cacheItem('rejected', item);
-          } else if ( isProvider ) {
+          } else if (isProvider) {
             this.removeItem('all', item);
             this.cacheItem('providers', item);
             this.removeItem('rejected', item);
@@ -135,16 +136,16 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     //   });
     // });
 
-    this.afs.collection( 'providers', ref => ref.orderBy('timestamp', 'desc') ).valueChanges().subscribe( (data: any) => {
+    this.afs.collection('providers', ref => ref.orderBy('timestamp', 'desc')).valueChanges().subscribe((data: any) => {
       this.pioneers = [];
-      data.map( (item) => {
+      data.map((item) => {
         this.pioneers.push(item);
       });
     });
 
-    this.afs.collection( 'rejected', ref => ref.orderBy('timestamp', 'desc') ).valueChanges().subscribe( (data: any) => {
+    this.afs.collection('rejected', ref => ref.orderBy('timestamp', 'desc')).valueChanges().subscribe((data: any) => {
       this.rejected = [];
-      data.map( (item) => {
+      data.map((item) => {
         this.rejected.push(item);
       });
     });
@@ -160,8 +161,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       console.log('onAddToWhitelist', object.address);
       // this.all.splice(object.i, 1);
       await this.ethService.addProvider(object.address);
-      this.afs.collection('providers').doc( object.address ).set( object );
-      this.afs.collection('rejected').doc( object.address ).delete();
+      this.afs.collection('providers').doc(object.address).set(object);
+      this.afs.collection('rejected').doc(object.address).delete();
     } catch (error) {
       console.log('onAddToWhitelist - error', error);
     }
@@ -171,8 +172,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     try {
       console.log('onActivateProfile', object.address);
       await this.ethService.activateProvider(object.address);
-      this.afs.collection('active').doc( object.address ).set( object );
-      this.afs.collection('rejected').doc( object.address ).delete();
+      this.afs.collection('active').doc(object.address).set(object);
+      this.afs.collection('rejected').doc(object.address).delete();
     } catch (error) {
       console.log('onActivateProfile - error', error);
     }
@@ -182,23 +183,23 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     try {
       console.log('onActivateProfile', object.address);
       await this.ethService.rejectProvider(object.address);
-      this.afs.collection('rejected').doc( object.address ).set( object );
-      this.afs.collection('providers').doc( object.address ).delete();
-      this.afs.collection('active').doc( object.address ).delete();
+      this.afs.collection('rejected').doc(object.address).set(object);
+      this.afs.collection('providers').doc(object.address).delete();
+      this.afs.collection('active').doc(object.address).delete();
     } catch (error) {
       console.log('onRejectProvider - error', error);
     }
   }
 
   onScroll(event: any) {
-    if ( this.currentTab === 'All' ) {
+    if (this.currentTab === 'All') {
       this.page.more();
     }
   }
 
   onSubmit(event: any) {
-    if ( (<any>window).$('html, body') ) {
-      (<any>window).$('html, body').animate({scrollTop : -10}, 600);
+    if ((<any>window).$('html, body')) {
+      (<any>window).$('html, body').animate({ scrollTop: -10 }, 600);
     }
     this.router.navigate(['search', event]);
   }

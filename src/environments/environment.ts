@@ -6,11 +6,12 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: 'AIzaSyD70knpisUvmyKbW4uNSI3dM2XDrXYVB0Q',
-    authDomain: 'canyadao-6408c.firebaseapp.com',
-    databaseURL: 'https://canyadao-6408c.firebaseio.com',
-    projectId: 'canyadao-6408c',
-    storageBucket: 'canyadao-6408c.appspot.com',
-    messagingSenderId: '363504574189'
-  }
+    apiKey: 'AIzaSyDgQSxm0HAfhiLrB_z9dSaWCDeYlYQnBzk',
+    authDomain: 'candao-af747.firebaseapp.com',
+    databaseURL: 'https://candao-af747.firebaseio.com',
+    projectId: 'candao-af747',
+    storageBucket: 'candao-af747.appspot.com',
+    messagingSenderId: '645784786436'
+  },
+  ethNetId: 1524196056249
 };
