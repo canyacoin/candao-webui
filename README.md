@@ -1,5 +1,12 @@
 # CanYaDao
 
+**Mirror**
+
+This repo is mirrored from the Gitlab master as a backup. Please commit to this:
+
+https://gitlab.com/canyacoin/canyadao/candao/web-ui
+---
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.2.
 
 ## Development server
